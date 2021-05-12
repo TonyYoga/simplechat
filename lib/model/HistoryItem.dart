@@ -1,16 +1,9 @@
-import 'User.dart';
-import 'package:hive/hive.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-part 'HistoryItem.g.dart';
-
-@HiveType(typeId: 0)
-class HistoryItem extends HiveObject{
-  @HiveField(0)
-  late User user;
-  @HiveField(1)
-  late DateTime dateTimeUts;
-  @HiveField(2)
+class HistoryItem{
+  late String user;
+  late Timestamp dateTimeUts;
   late String message;
 
-  // HistoryItem(this.user, this.dateTimeUts, this.message);
+  HistoryItem({required this.user, required this.dateTimeUts, required this.message});
 }

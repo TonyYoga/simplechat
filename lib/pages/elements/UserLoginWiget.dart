@@ -6,7 +6,6 @@ import 'package:simplechat/settings/Sizes.dart';
 class UserLoginWidget extends StatefulWidget {
   final Function? setUserName;
 
-  // final bool? isNameSet;
   final String? userName;
 
   const UserLoginWidget({
@@ -24,7 +23,6 @@ class _UserLoginWidgetState extends State<UserLoginWidget> {
 
   @override
   Widget build(BuildContext context) {
-    dev.log('${widget.userName} UserLoginWidget');
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: widget.userName == null || widget.userName!.isEmpty

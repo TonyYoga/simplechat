@@ -1,11 +1,6 @@
-import 'package:hive/hive.dart';
-
-part 'Word.g.dart';
-
-@HiveType(typeId: 2)
-class Word extends HiveObject{
-  @HiveField(0)
+class Word {
   late String word;
-  @HiveField(1)
   late int count;
+
+  Word({required this.word,required this.count});
 }

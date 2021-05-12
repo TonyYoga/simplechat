@@ -1,9 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:simplechat/model/HistoryItem.dart';
-import 'package:simplechat/model/User.dart';
-import 'package:simplechat/model/Word.dart';
-import 'package:simplechat/repo/Boxes.dart';
 import 'dart:developer';
 
 class MessageWidget extends StatefulWidget {
@@ -15,8 +12,8 @@ class MessageWidget extends StatefulWidget {
 }
 
 class _MessageWidgetState extends State<MessageWidget> {
-  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final messageController = TextEditingController();
+
 
   @override
   void initState() {
@@ -47,36 +44,60 @@ class _MessageWidgetState extends State<MessageWidget> {
         ),
         TextButton(
             child: Text('Send'),
-            onPressed: () => _addMessage(new User()..name = widget.userName ?? 'Anonim',
-                DateTime.now(), messageController.text))
+            onPressed: () => _addMessage(
+                widget.userName ?? 'Anonim',
+                DateTime.now(),
+                messageController.text))
       ],
     );
   }
 
-  _addMessage(User user, DateTime dateTime, String text) {
-    final historyItem = HistoryItem()
-      ..user = user
-      ..dateTimeUts = dateTime
-      ..message = text;
-    final box = Boxes.getHistory();
-    box.add(historyItem);
+  _addMessage(String user, DateTime dateTime, String text) {
+    CollectionReference history = FirebaseFirestore.instance.collection('chathistory');
+    history.add({
+      'user': user,
+      'datetime':  dateTime.toUtc(),
+      'message': text
+    }).then((value) => log('Message added'))
+    .catchError((err) => log('Failed to add message'));
+
     _calculateAndAdd(text.toLowerCase());
     messageController.clear();
   }
-  
-  _calculateAndAdd(String text) {
+
+  _calculateAndAdd(String text) async {
     final wordArray = text.split(" ");
-    final box = Boxes.getWords();
-    final vocabulary = box.keys.toList();
-    wordArray.forEach((element) { 
-      if(vocabulary.contains(element)) {
-        final word = box.get(element);
-        // log('${word!.word} - ${word!.count}');
-        word!.count = word.count + 1;
-        // log('$inc');
-        box.put(element, word);
-      } else {
-        box.put(element, Word()..word= element..count = 1);
+
+    CollectionReference words = FirebaseFirestore.instance.collection('words');
+
+    //exists words array
+    var wordsData = await words.get()
+        .then((QuerySnapshot querySnapshot) =>
+        querySnapshot.docs.map<String>((docs) =>
+        (docs.data()as Map)['word']
+        ).toList()).catchError((onError) => log('$onError'));
+
+    //check upd or add
+    wordArray.forEach((element) {
+      if(wordsData.contains(element)) {
+        //update word
+        words.where('word', isEqualTo: element).get()
+            .then((snapshot) {
+          var curCount = (snapshot.docs.first.data() as Map)['count'];
+          words.doc(snapshot.docs.first.id).update({
+            'count': curCount + 1
+          }).then((value) => log('upd word: $element success'))
+              .catchError((onError) => log('upd error')
+          );
+        })
+            .catchError((e) {
+          log(e);
+        });
+      }else {
+        //add word
+        words.add({'word': element, 'count': 1})
+            .then((value) => log('word $element added'))
+        .catchError((e) => log(e));
       }
     });
   }
