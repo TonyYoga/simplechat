@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:simplechat/model/Word.dart';
 import 'package:simplechat/settings/Sizes.dart';
@@ -66,15 +67,17 @@ class WordsWithCountListWidget extends StatelessWidget {
         itemBuilder: (context, index) {
           final wordItem = wordsList[index];
           return Container(
-            child: Row(
-              children: [
-                Text(wordItem.word),
-                SizedBox(
-                  width: 10,
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.symmetric(vertical: 5.0 , horizontal: 0.0),
+            decoration: BoxDecoration(
+                color: Colors.blueGrey.shade100,
+                border: Border.all(
+                  color: Colors.black,
+                  width: 2,
                 ),
-                Text(wordItem.count.toString()),
-              ],
+                borderRadius: BorderRadius.circular(5)
             ),
+            child: Text("${wordItem.word} : ${wordItem.count.toString()}"),
           );
         },
       ),

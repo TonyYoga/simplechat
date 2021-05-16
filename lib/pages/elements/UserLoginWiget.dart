@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'dart:developer' as dev;
+// import 'dart:developer' as dev;
 import 'package:simplechat/settings/Sizes.dart';
 
 class UserLoginWidget extends StatefulWidget {
@@ -45,14 +45,30 @@ class _UserLoginWidgetState extends State<UserLoginWidget> {
                     onPressed: () => widget.setUserName!(textController.text))
               ],
             )
-          : Row(
-              children: [
-                Text('User name: '),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(widget.userName ?? 'Anonim'),
-              ],
+          : Container(
+              padding: EdgeInsets.all(20),
+              margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 0.0),
+              decoration: BoxDecoration(
+                  color: Colors.blue.shade100,
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(5)),
+              child: Row(
+                children: [
+                  Text('User name: '),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                      widget.userName ?? 'Anonim',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ],
+              ),
             ),
     );
   }
