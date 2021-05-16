@@ -66,8 +66,11 @@ class _MessageWidgetState extends State<MessageWidget> {
   }
 
   _calculateAndAdd(String text) async {
-    final wordArray = text.split(" ");
-
+    RegExp exp = RegExp(r"(\w+)");
+    var matches = exp.allMatches(text);
+    //Words not found;
+    if(matches.isEmpty) return;
+    final wordArray =matches.map((match) => match[0]).toList();
     CollectionReference words = FirebaseFirestore.instance.collection('words');
 
     //exists words array
@@ -76,6 +79,7 @@ class _MessageWidgetState extends State<MessageWidget> {
         querySnapshot.docs.map<String>((docs) =>
         (docs.data()as Map)['word']
         ).toList()).catchError((onError) => log('$onError'));
+
 
     //check upd or add
     wordArray.forEach((element) {

@@ -83,18 +83,39 @@ Widget _buildHistoryView(List<HistoryItem> historyItems, BuildContext context) {
         itemBuilder: (context, index) {
           final historyItem = historyItems[index];
           return Container(
-            child: Row(
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.symmetric(vertical: 5.0 , horizontal: 0.0),
+            decoration: BoxDecoration(
+              color: Colors.blueGrey.shade100,
+              border: Border.all(
+                color: Colors.black,
+                width: 2,
+              ),
+                borderRadius: BorderRadius.circular(5)
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(historyItem.user),
-                SizedBox(
-                  width: 10,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(historyItem.user, style: TextStyle(
+                      fontWeight: FontWeight.bold
+                    ),),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(historyItem.dateTimeUts.convertFrom.toUtc().toString()),
+                    SizedBox(
+                      width: 10,
+                    ),
+                  ],
                 ),
-                Text(historyItem.dateTimeUts.convertFrom.toUtc().toString()),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(historyItem.message),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 5.0),
+                    child: Text(historyItem.message,)),
               ],
+
             ),
           );
         },
