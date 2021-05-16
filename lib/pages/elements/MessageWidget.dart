@@ -66,7 +66,7 @@ class _MessageWidgetState extends State<MessageWidget> {
   }
 
   _calculateAndAdd(String text) async {
-    RegExp exp = RegExp(r"(\w+)");
+    RegExp exp = RegExp(r"(\w+)", unicode: true);
     var matches = exp.allMatches(text);
     //Words not found;
     if(matches.isEmpty) return;
