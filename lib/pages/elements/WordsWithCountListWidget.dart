@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:simplechat/model/Word.dart';
 import 'package:simplechat/settings/Sizes.dart';
+import 'package:simplechat/utils/FireBaseLogicMixin.dart';
 
-class WordsWithCountListWidget extends StatelessWidget {
-  const WordsWithCountListWidget({Key? key}) : super(key: key);
+class WordsWithCountListWidget extends StatelessWidget with FireBaseLogicMixin{
+  WordsWithCountListWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +38,20 @@ class WordsWithCountListWidget extends StatelessWidget {
                 SizedBox(
                   height: 10,
                 ),
-                Text(
-                  'WordList',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                Row(
+                  children: [
+                    Text(
+                      'WordList',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    IconButton(
+                        onPressed: reloadWordList,
+                        icon: Icon(Icons.wifi_protected_setup))
+
+                  ],
                 ),
                 SizedBox(
                   height: 10,
